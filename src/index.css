@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html:has(.oska-overlay), body:has(.oska-overlay), body:has(.oska-overlay) #root { background: transparent !important; }
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #050B13;
+  color: #FFFFFF;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+/* Custom cyber scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(5, 11, 19, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 229, 229, 0.25);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 229, 229, 0.6);
+}
+
+/* Hologram scanline effect */
+.hologram-grid {
+  background-image: 
+    linear-gradient(rgba(0, 229, 229, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 229, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.frosted-glass {
+  background: rgba(11, 20, 37, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 229, 229, 0.15);
+}
+
+.frosted-glass-active {
+  background: rgba(19, 34, 62, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 229, 229, 0.4);
+  box-shadow: 0 0 20px rgba(0, 229, 229, 0.2);
+}

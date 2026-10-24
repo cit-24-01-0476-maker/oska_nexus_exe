@@ -8,6 +8,7 @@
 [![React](https://img.shields.io/badge/React_19-TypeScript-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
 [![Three.js](https://img.shields.io/badge/Three.js-3D_Holographic_Mesh-black?style=for-the-badge&logo=three.js&logoColor=white)](https://threejs.org)
 [![Python](https://img.shields.io/badge/Python_3.11+-FastAPI_Backend-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![Release](https://img.shields.io/github/v/release/cit-24-01-0476-maker/oska_nexus_exe?style=for-the-badge&label=Download&color=00E5E5)](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases/latest)
 [![License](https://img.shields.io/badge/License-MIT-8057E9?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -155,13 +156,20 @@ OSKA NEXUS natively understands commands in **Sinhala**, **Singlish**, and **Eng
 
 ## 📥 Downloads & Installers
 
-Pre-built self-contained Windows installers (no Python or external runtimes required):
+> **One-click install — no Python, Rust, or Node.js required on the target machine!**
 
-| Package Type | File Name | Size | Architecture |
+Pre-built self-contained Windows installers for v1.1.2:
+
+| Package Type | Download Link | Size | Architecture |
 | :--- | :--- | :--- | :--- |
-| **Windows NSIS Installer** *(Recommended)* | [`OSKA NEXUS_1.1.2_x64-setup.exe`](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases) | `153.89 MB` | Windows 10 / 11 (x64) |
-| **Windows MSI Installer** | [`OSKA NEXUS_1.1.2_x64_en-US.msi`](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases) | `155.04 MB` | Windows 10 / 11 (x64) |
-| **Portable Standalone Executable** | [`oska-nexus.exe`](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases) | `Standalone` | Windows 10 / 11 (x64) |
+| 🏆 **Windows NSIS Installer** *(Recommended)* | [**⬇ Download Setup.exe**](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases/download/v1.1.2/OSKA.NEXUS_1.1.2_x64-setup.exe) | `~154 MB` | Windows 10 / 11 (x64) |
+| 🔧 **Windows MSI Installer** | [**⬇ Download .msi**](https://github.com/cit-24-01-0476-maker/oska_nexus_exe/releases/download/v1.1.2/OSKA.NEXUS_1.1.2_x64_en-US.msi) | `~155 MB` | Windows 10 / 11 (x64) |
+
+> [!NOTE]
+> **First Run:** Windows SmartScreen may show a warning since the app is unsigned. Click **"More info" → "Run anyway"**. This is safe — the app is open source.
+
+> [!TIP]
+> **WebView2 Runtime**: The installer automatically downloads and installs the Microsoft WebView2 Runtime if not already present on your PC.
 
 ---
 

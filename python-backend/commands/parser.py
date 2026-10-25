@@ -152,7 +152,7 @@ class CommandParser:
             return {"intent": "mouse_scroll", "args": {"direction": "up"}}
 
         # File system & Utilities
-        if "රීසයිකල් බින්" in clean or re.search(r"\b(empty recycle bin|clear recycle bin|recycle bin eka as|recycle bin empty|empty trash)\b", clean):
+        if "රීසයිකල් බින්" in clean or re.search(r"\b(empty recycle bin|clear recycle bin|recycle bin (?:eka\s+)?(?:as|empty|clear)|empty trash)\b", clean):
             return {"intent": "empty_recycle_bin", "args": {}}
 
         create_folder_match = re.search(r"(?:desktop eke|desktop\s+වල|folder ekak hadanna|create folder|make folder|new folder|ෆෝල්ඩර් එකක් හදන්න)\s*([a-zA-Z0-9_\-\s]*)(?:folder ekak|කියලා)?", clean)
@@ -209,7 +209,7 @@ class CommandParser:
         # -------------------------------------------------------------
         # 4. Audio Controls (English, Singlish & Sinhala)
         # -------------------------------------------------------------
-        vol_set_match = re.search(r"\b(set volume to|volume|sound|වොලියුම්|ශබ්දය)\s+(\d{1,3})\s*(%|percent)?\b", clean)
+        vol_set_match = re.search(r"\b(set volume to|volume|sound|වොලියුම්|ශබ්දය)\s*(?:eka|ekak|එක)?\s*(\d{1,3})\s*(%|percent)?\b", clean)
         if vol_set_match:
             return {"intent": "set_volume", "args": {"level": int(vol_set_match.group(2))}}
 

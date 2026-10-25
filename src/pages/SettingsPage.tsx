@@ -262,13 +262,14 @@ export const SettingsPage: React.FC = () => {
                 const provider = e.target.value;
                 updateKey('llm_provider', provider);
                 if (provider === 'xai') { updateKey('xai_model', settings.xai_model || 'grok-4.7'); return; }
-                const defaults: Record<string,string> = { gemini: 'gemini-3.1-flash-lite', openai: 'gpt-4o-mini', ollama: 'llama3' };
+                const defaults: Record<string,string> = { groq: 'openai/gpt-oss-120b', gemini: 'gemini-3.1-flash-lite', openai: 'gpt-4o-mini', ollama: 'llama3' };
                 const current = settings.llm_model || '';
-                const keepCurrent = provider === 'gemini' ? current.startsWith('gemini-') : provider === 'openai' ? current.startsWith('gpt-') : provider === 'ollama' && current && !current.startsWith('gemini-') && !current.startsWith('gpt-');
+                const keepCurrent = provider === 'groq' ? (current.includes('120b') || current.includes('20b')) : provider === 'gemini' ? current.startsWith('gemini-') : provider === 'openai' ? current.startsWith('gpt-') : provider === 'ollama' && current && !current.startsWith('gemini-') && !current.startsWith('gpt-');
                 updateKey('llm_model', keepCurrent ? current : defaults[provider] || '');
               }}
               className="w-full bg-obsidian border border-cyan/20 rounded-xl px-3 py-2 text-xs text-white"
             >
+              <option value="groq">Layer 2: Groq AI (Ultra Fast 120B, Sinhala & English Spoken)</option>
               <option value="local_rules">Layer 1: Local Rule Engine (100% Offline, Fast)</option>
               <option value="ollama">Layer 2: Local Ollama (Self-Hosted LLM)</option>
               <option value="openai">Layer 2: OpenAI API</option>
@@ -300,11 +301,11 @@ export const SettingsPage: React.FC = () => {
             </div>
           )}
 
-          {(['openai', 'gemini', 'xai'].includes(settings.llm_provider)) && <div>
+          {(['groq', 'openai', 'gemini', 'xai'].includes(settings.llm_provider)) && <div>
             <label className="text-xs text-muted block mb-1">Model Name</label>
             <input aria-label="AI model name" className="w-full bg-obsidian border border-cyan/20 rounded-xl px-3 py-2 text-xs text-white" value={(settings.llm_provider === 'xai' ? settings.xai_model : settings.llm_model) || ''} onChange={e => updateKey(settings.llm_provider === 'xai' ? 'xai_model' : 'llm_model', e.target.value)} />
           </div>}
-          {(['openai', 'gemini', 'xai'].includes(settings.llm_provider)) && (
+          {(['groq', 'openai', 'gemini', 'xai'].includes(settings.llm_provider)) && (
             <div>
               <label className="text-xs text-muted block mb-1">
                 {settings.llm_provider.toUpperCase()} API Key
@@ -313,13 +314,14 @@ export const SettingsPage: React.FC = () => {
                 type="password"
                 value={(settings.llm_provider === 'xai' ? settings.xai_api_key : settings.llm_api_key) || ''}
                 onChange={(e) => updateKey(settings.llm_provider === 'xai' ? 'xai_api_key' : 'llm_api_key', e.target.value)}
-                placeholder={settings.llm_provider === 'xai' ? 'xai-...' : 'API key'}
+                placeholder={settings.llm_provider === 'groq' ? 'gsk_...' : settings.llm_provider === 'xai' ? 'xai-...' : 'API key'}
                 className="w-full bg-obsidian border border-cyan/20 rounded-xl px-3 py-2 text-xs text-white font-mono"
               />
             </div>
           )}
         </div>
 
+        {settings.llm_provider === 'groq' && <p className="text-xs text-cyan">⚡ Groq AI is active. Ultra-fast conversational intelligence (Sinhala & English) and speech recognition enabled.</p>}
         {settings.llm_provider === 'xai' && <p className="text-xs text-muted">Grok (xAI) and Groq are different providers. xAI needs its own API credits or license. Its key and model are saved separately from Gemini/OpenAI.</p>}
 
         {/* Section 5: Windows Desktop & System Tray Integration */}

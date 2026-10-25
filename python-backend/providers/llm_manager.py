@@ -111,7 +111,12 @@ class LLMManager:
         if provider == 'xai':
             key = settings.get('xai_api_key', '').strip()
             model = settings.get('xai_model', 'grok-4.7').strip() or 'grok-4.7'
-        if provider in ['gemini', 'openai', 'xai'] and not key:
+        elif provider == 'groq':
+            key = settings.get('groq_api_key', '').strip() or settings.get('llm_api_key', '').strip()
+            model = settings.get('groq_model', '').strip() or settings.get('llm_model', '').strip()
+            if not model or model.startswith(('gemini-', 'gpt-', 'grok-', 'llama3')):
+                model = 'openai/gpt-oss-120b'
+        if provider in ['gemini', 'openai', 'xai', 'groq'] and not key:
             raise ValueError(f'Add your {provider} API key in Settings first.')
         try:
             with httpx.Client(timeout=30) as client:
@@ -140,6 +145,30 @@ class LLMManager:
                     data = response.json()
                     result = ''.join(part.get('text','') for item in data.get('output',[]) if item.get('type') == 'message'
                                      for part in item.get('content',[]) if part.get('type') == 'output_text')
+                elif provider == 'groq':
+                    if not model:
+                        model = 'openai/gpt-oss-120b'
+                    messages = [{'role': 'system', 'content': instruction}, *history, {'role': 'user', 'content': prompt}]
+                    models_to_try = [model]
+                    if '20b' not in model:
+                        models_to_try.append('openai/gpt-oss-20b')
+                    last_exc = None
+                    for m in models_to_try:
+                        try:
+                            response = client.post(
+                                'https://api.groq.com/openai/v1/chat/completions',
+                                headers={'Authorization': f'Bearer {key}'},
+                                json={'model': m, 'messages': messages, 'temperature': 0.7, 'max_tokens': 1024},
+                                timeout=25.0
+                            )
+                            response.raise_for_status()
+                            result = response.json()['choices'][0]['message']['content']
+                            break
+                        except Exception as ex:
+                            last_exc = ex
+                            continue
+                    if result is None and last_exc:
+                        raise last_exc
                 elif provider == 'openai':
                     if not model or model.startswith('gemini-') or model == 'llama3': model = 'gpt-4o-mini'
                     response = client.post('https://api.openai.com/v1/chat/completions', headers={'Authorization':f'Bearer {key}'}, json={'model':model,'messages':[{'role':'system','content':instruction}, *history, {'role':'user','content':prompt}]})
@@ -151,6 +180,11 @@ class LLMManager:
                 raise ValueError('The AI provider returned no text. Check the model and try again.')
             return result.strip()
         except httpx.HTTPStatusError as exc:
+            if provider == 'groq':
+                if exc.response.status_code == 401:
+                    raise RuntimeError('Groq rejected the API key. Please check your Groq API key in Settings.') from None
+                if exc.response.status_code == 429:
+                    raise RuntimeError('Groq rate limit reached. Please wait a moment and try again.') from None
             if provider == 'xai':
                 try:
                     error = str(exc.response.json().get('error', '')).lower()

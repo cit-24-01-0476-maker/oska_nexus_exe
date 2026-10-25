@@ -113,9 +113,11 @@ def init_db():
         "tts_voice_id": "",
         "tts_rate": "180",
         "tts_volume": "1.0",
-        "llm_provider": "local_rules", # local_rules, ollama, openai, gemini
-        "llm_model": "gpt-4o-mini",
-        "llm_api_key": "",
+        "llm_provider": "groq", # groq, local_rules, ollama, openai, gemini, xai
+        "llm_model": "openai/gpt-oss-120b",
+        "llm_api_key": os.environ.get("GROQ_API_KEY", ""),
+        "groq_api_key": os.environ.get("GROQ_API_KEY", ""),
+        "groq_model": "openai/gpt-oss-120b",
         "xai_api_key": "",
         "xai_model": "grok-4.7",
         "ollama_endpoint": "http://localhost:11434",

@@ -181,6 +181,7 @@ def process_voice_interaction():
         state_machine.transition_to(AssistantState.TRANSCRIBING)
         if len(audio_data) > 0:
             language = settings.get('speech_language', 'auto')
+            whisper_stt.set_groq_api_key(settings.get('groq_api_key') or settings.get('llm_api_key'))
             text = whisper_stt.transcribe(audio_data, language=None if language == 'auto' else language)
             if text and text.strip():
                 handle_command_text(text)
@@ -288,6 +289,7 @@ async def lifespan(app: FastAPI):
     shutdown_event.clear()
     settings = get_all_settings()
     whisper_stt.model_size = settings.get('stt_model', 'base')
+    whisper_stt.set_groq_api_key(settings.get('groq_api_key') or settings.get('llm_api_key'))
     wake_engine.configure(settings.get('porcupine_access_key', ''), settings.get('porcupine_keyword_path', ''), float(settings.get('porcupine_sensitivity', '.5')))
     resume_wake()
     threading.Thread(target=reminder_worker, daemon=True).start()
@@ -405,6 +407,7 @@ def api_update_settings(req: SettingsUpdateRequest):
     for k, v in req.settings.items():
         set_setting(k, v)
     audio_capture.set_device(int(device) if device else None)
+    whisper_stt.set_groq_api_key(settings.get('groq_api_key') or settings.get('llm_api_key'))
     if previous.get('stt_model') != settings.get('stt_model'):
         whisper_stt.model_size = settings.get('stt_model', 'base')
         whisper_stt._model = None
